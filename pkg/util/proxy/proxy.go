@@ -38,6 +38,7 @@ import (
 	"k8s.io/apiserver/pkg/endpoints/handlers/responsewriters"
 	"k8s.io/apiserver/pkg/endpoints/request"
 	registryrest "k8s.io/apiserver/pkg/registry/rest"
+	"k8s.io/klog/v2"
 
 	clusterapis "github.com/karmada-io/karmada/pkg/apis/cluster"
 )
@@ -112,6 +113,10 @@ func newProxyHandler(location *url.URL, proxyTransport http.RoundTripper, cluste
 
 		handler := NewUpgradeAwareHandler(location, proxyTransport, false, httpstream.IsUpgradeRequest(req), proxyutil.NewErrorResponder(responder))
 		handler.UpgradeDialer = upgradeDialer
+
+		klog.Error("poc: adding Warning header to response - ServeHTTP")
+		rw.Header().Set("Warning", `299 - "POC for warning header"`)
+		rw.Header().Add("X-Compute-POC", "true")
 		handler.ServeHTTP(rw, req)
 	}), nil
 }

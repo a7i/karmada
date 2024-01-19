@@ -85,6 +85,9 @@ func (r *ProxyREST) connectAllClusters(
 			location.Path = path.Join(location.Path, proxyPath)
 			location.RawQuery = req.URL.RawQuery
 
+			klog.Error("poc: adding Warning header to response - connectAllClusters")
+			rw.Header().Set("Warning", getWarning())
+			rw.Header().Add("X-Compute-POC", "true")
 			handler := proxy.NewThrottledUpgradeAwareProxyHandler(&location, r.karmadaTransPort, true, false, responder)
 			handler.ServeHTTP(rw, req)
 		}), nil
@@ -164,6 +167,10 @@ func requestWithResourceNameHandlerFunc(
 				}
 			}(&cluster)
 		}
+		klog.Error("poc: adding Warning header to response - requestWithResourceNameHandlerFunc")
+		rw.Header().Set("Warning", getWarning())
+		rw.Header().Add("X-Compute-POC", "true")
+
 		wg.Wait()
 		switch len(requestContexts) {
 		case 0:
@@ -301,6 +308,9 @@ func requestWithoutResourceNameHandlerFunc(
 		}
 		rw.Header().Set("Content-Type", "application/json")
 		rw.Header().Set("Content-Length", strconv.Itoa(len(resByte)))
+		klog.Error("poc: adding Warning header to response - requestWithoutResourceNameHandlerFunc")
+		rw.Header().Set("Warning", getWarning())
+		rw.Header().Add("X-Compute-POC", "true")
 		for k, vs := range targetClusters[0].responseHeader {
 			if rw.Header().Get(k) != "" {
 				continue
@@ -386,4 +396,8 @@ func setRequestHeader(req *http.Request, userInfo user.Info, impersonateToken st
 		}
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("bearer %s", impersonateToken))
+}
+
+func getWarning() string {
+	return `299 - "POC for warning header"`
 }

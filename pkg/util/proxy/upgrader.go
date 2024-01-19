@@ -174,6 +174,7 @@ func (h *UpgradeAwareHandler) ServeHTTP(w http.ResponseWriter, req *http.Request
 		// or supporting retry mechanisms by not sending non-fatal errors to the clients
 		proxy.ErrorHandler = h.Responder.Error
 	}
+
 	proxy.ServeHTTP(w, newReq)
 }
 
