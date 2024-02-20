@@ -2,8 +2,8 @@ apiVersion: v2
 name: karmada
 description: A Helm chart for karmada
 
-version: v1.9.0-preview4
-appVersion: v1.9.0-preview4
+version: v1.9.0-preview5
+appVersion: v1.9.0-preview5
 
 # A chart can be either an 'application' or a 'library' chart.
 #
