@@ -1,0 +1,76 @@
+apiVersion: v1
+entries:
+  common:
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 1.17.1
+    created: "2024-01-26T13:29:42.023683-05:00"
+    description: A Library Helm Chart for grouping common logic between bitnami charts.
+      This chart is not deployable by itself.
+    digest: 2a623d42475796af0ff0d18bbfa3b76ead1ccd7efab8280ea079b6a53f5ac627
+    home: https://github.com/bitnami/charts/tree/master/bitnami/common
+    icon: https://bitnami.com/downloads/logos/bitnami-mark.png
+    keywords:
+    - common
+    - helper
+    - template
+    - function
+    - bitnami
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: common
+    sources:
+    - https://github.com/bitnami/charts
+    - https://www.bitnami.com/
+    type: library
+    urls:
+    - https://github.com/karmada-io/a7i/releases/download/charts/common-1.17.1.tgz
+    version: 1.17.1
+  karmada:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-02-20T17:41:05.396869-05:00"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      version: 1.x.x
+    description: A Helm chart for karmada
+    digest: 2593b0dad3ca45fd383a0aa6978cb0d81a7a51180759c75ca373b3e2201cfeb0
+    kubeVersion: '>= 1.16.0-0'
+    maintainers:
+    - email: jrkeen@hotmail.com
+      name: jrkeen
+    - email: jackson.cloudnative@gmail.com
+      name: pidb
+    - email: shentiecheng@huawei.com
+      name: Poor12
+    name: karmada
+    type: application
+    urls:
+    - https://github.com/karmada-io/a7i/releases/download/charts/karmada-v1.9.0-preview5.tgz
+    version: v1.9.0-preview5
+  - apiVersion: v2
+    appVersion: v1.9.0-preview4
+    created: "2024-01-26T13:29:42.030836-05:00"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      version: 1.x.x
+    description: A Helm chart for karmada
+    digest: 6cdaef8eec5f83f391e3b06b847eb6f68c7c6e7b409bb0bee6761507a3a57271
+    kubeVersion: '>= 1.16.0-0'
+    maintainers:
+    - email: jrkeen@hotmail.com
+      name: jrkeen
+    - email: jackson.cloudnative@gmail.com
+      name: pidb
+    - email: shentiecheng@huawei.com
+      name: Poor12
+    name: karmada
+    type: application
+    urls:
+    - https://github.com/karmada-io/a7i/releases/download/charts/karmada-v1.9.0-preview4.tgz
+    version: v1.9.0-preview4
+generated: "2024-01-26T13:29:42.022728-05:00"
