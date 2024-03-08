@@ -1108,4 +1108,65 @@ var _ = ginkgo.Describe("[AdvancedPropagation] propagation testing", func() {
 			framework.RemovePropagationPolicy(karmadaClient, policy02.Namespace, policy02.Name)
 		})
 	})
+
+	ginkgo.Context("Suspend the propagationPolicy", func() {
+		var policy *policyv1alpha1.PropagationPolicy
+		var deployment *appsv1.Deployment
+		var targetMember string
+		var esName string
+		var workName string
+
+		ginkgo.BeforeEach(func() {
+			targetMember = framework.ClusterNames()[0]
+			policyNamespace := testNamespace
+			policyName := deploymentNamePrefix + rand.String(RandomStrLength)
+			esName = names.GenerateExecutionSpaceName(targetMember)
+			deployment = testhelper.NewDeployment(testNamespace, policyName+"01")
+			workName = names.GenerateWorkName(deployment.Kind, deployment.Name, deployment.Namespace)
+			policy = testhelper.NewPropagationPolicy(policyNamespace, policyName, []policyv1alpha1.ResourceSelector{
+				{
+					APIVersion: deployment.APIVersion,
+					Kind:       deployment.Kind,
+					Name:       deployment.Name,
+				}}, policyv1alpha1.Placement{
+				ClusterAffinity: &policyv1alpha1.ClusterAffinity{
+					ClusterNames: []string{targetMember},
+				},
+			})
+			policy.Spec.Suspend = true
+		})
+
+		ginkgo.BeforeEach(func() {
+			framework.CreatePropagationPolicy(karmadaClient, policy)
+			framework.CreateDeployment(kubeClient, deployment)
+			ginkgo.DeferCleanup(func() {
+				framework.RemoveDeployment(kubeClient, deployment.Namespace, deployment.Name)
+			})
+		})
+
+		ginkgo.It("suspends resource binding", func() {
+			gomega.Eventually(func() bool {
+				bindings, err := karmadaClient.WorkV1alpha2().ResourceBindings(testNamespace).List(context.TODO(), metav1.ListOptions{
+					LabelSelector: labels.SelectorFromSet(labels.Set{
+						policyv1alpha1.PropagationPolicyNamespaceLabel: policy.Namespace,
+						policyv1alpha1.PropagationPolicyNameLabel:      policy.Name,
+					}).String(),
+				})
+				if err != nil {
+					return false
+				}
+				return len(bindings.Items) != 0 && bindings.Items[0].Spec.Suspend
+			}, pollTimeout, pollInterval).Should(gomega.Equal(true))
+		})
+
+		ginkgo.It("suspends work", func() {
+			gomega.Eventually(func() bool {
+				work, err := karmadaClient.WorkV1alpha1().Works(esName).Get(context.TODO(), workName, metav1.GetOptions{})
+				if err != nil {
+					return false
+				}
+				return work != nil && work.Spec.Suspend
+			}, pollTimeout, pollInterval).Should(gomega.Equal(true))
+		})
+	})
 })
