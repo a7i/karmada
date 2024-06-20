@@ -2,6 +2,28 @@ apiVersion: v1
 entries:
   karmada:
   - apiVersion: v2
+    appVersion: v1.10.1-work-suspend
+    created: "2024-06-20T14:31:25.606126354Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      version: 2.x.x
+    description: A Helm chart for karmada
+    digest: 65af7693055fcfdc566783a59755fca7159c924e085c31a4ba4906bc04b7c169
+    kubeVersion: '>= 1.16.0-0'
+    maintainers:
+    - email: jrkeen@hotmail.com
+      name: jrkeen
+    - email: jackson.cloudnative@gmail.com
+      name: pidb
+    - email: shentiecheng@huawei.com
+      name: Poor12
+    name: karmada
+    type: application
+    urls:
+    - https://github.com/a7i/karmada/releases/download/v1.10.1-work-suspend/karmada-v1.10.1-work-suspend.tgz
+    version: v1.10.1-work-suspend
+  - apiVersion: v2
     appVersion: v1.10.0-preview4-suspend
     created: "2024-05-16T21:54:09.411443435Z"
     dependencies:
