@@ -18,7 +18,14 @@ spec:
     singular: propagationpolicy
   scope: Namespaced
   versions:
-  - name: v1alpha1
+  - additionalPrinterColumns:
+    - jsonPath: .spec.conflictResolution
+      name: Conflict-Resolution
+      type: string
+    - jsonPath: .spec.priority
+      name: Priority
+      type: string
+    name: v1alpha1
     schema:
       openAPIV3Schema:
         description: PropagationPolicy represents the policy that propagates a group
@@ -790,3 +797,4 @@ spec:
         type: object
     served: true
     storage: true
+    subresources: {}
